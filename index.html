@@ -3,86 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CBS - Awaz Box</title>
-<style>
-  body { 
-    font-family: 'Segoe UI', Arial, sans-serif; 
-    background: #121212; 
-    color: #e0e0e0;
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px; 
-  }
-  .box { 
-    background: #1e1e1e; 
-    padding: 35px; 
-    border-radius: 16px; 
-    max-width: 500px; 
-    width: 100%; 
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    border: 1px solid #2a2a2a;
-  }
-  h2 { color: #ffffff; text-align: center; letter-spacing: 1px; margin-bottom: 5px; }
-  .subtitle { color: #9e9e9e; font-size: 13px; text-align: center; margin-bottom: 25px; letter-spacing: 0.5px; }
-  textarea { 
-    width: 100%; 
-    height: 160px; 
-    padding: 15px; 
-    background: #2a2a2a;
-    color: #ffffff;
-    border: 1px solid #3a3a3a; 
-    border-radius: 10px; 
-    font-size: 15px; 
-    margin: 15px 0; 
-    resize: none;
-    outline: none;
-  }
-  textarea:focus { border-color: #757575; }
-  textarea::placeholder { color: #757575; }
-  button { 
-    width: 100%; 
-    padding: 14px; 
-    background: linear-gradient(145deg, #424242, #212121); 
-    color: white; 
-    border: 1px solid #424242; 
-    border-radius: 10px; 
-    font-size: 16px; 
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer; 
-    transition: 0.3s;
-  }
-  button:hover { background: #424242; transform: translateY(-1px); }
-  #msg { text-align: center; margin-top: 20px; font-weight: bold; font-size: 14px; }
-  .footer { text-align: center; margin-top: 20px; font-size: 11px; color: #616161; }
-</style>
+<title>CBS Anonymous Box</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="box">
-  <h2>CBS - AWAZ BOX</h2>
-  <div class="subtitle">100% ANONYMOUS & SECURE</div>
-  <textarea id="problem" placeholder="Apna masla yahan likhen... naam / class likhne ki zarurat nahi"></textarea>
-  <button onclick="submitProblem()">SEND ANONYMOUSLY</button>
-  <div id="msg"></div>
-  <div class="footer">IMCG Students Welfare Initiative</div>
+<body class="bg-[#f9f6f2] min-h-screen flex items-center justify-center p-4">
+
+<div class="bg-white max-w-md w-full rounded-[30px] p-8 shadow-xl">
+  <h1 class="text-2xl font-bold text-center">Anonymous Problem Box 📮</h1>
+  <p class="text-center text-gray-500 text-sm mt-2">Your identity will remain hidden</p>
+  
+  <textarea id="problem" rows="6" placeholder="Apna masla yahan likho..." 
+  class="w-full mt-6 p-4 bg-gray-50 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black"></textarea>
+  
+  <button id="btn" class="w-full mt-4 bg-black text-white py-4 rounded-2xl font-semibold">
+    Submit Anonymously
+  </button>
+  
+  <p id="status" class="text-center mt-4 text-sm"></p>
 </div>
 
 <script>
-function submitProblem() {
-  let text = document.getElementById('problem').value;
-  let msg = document.getElementById('msg');
-  if(text.trim() == "") {
-    msg.innerText = "Please pehle masla likhen.";
-    msg.style.color = "#ef5350";
+const btn = document.getElementById('btn');
+const problemInput = document.getElementById('problem');
+const status = document.getElementById('status');
+
+btn.addEventListener('click', async () => {
+  const problem = problemInput.value.trim();
+  if(!problem){
+    status.textContent = "Please likho to sahi...";
+    status.className = "text-center mt-4 text-sm text-red-500";
     return;
   }
-  msg.innerText = "Shukriya! Apka masla mehfooz ho gaya hai.";
-  msg.style.color = "#9e9e9e";
-  document.getElementById('problem').value = "";
-}
+
+  btn.textContent = "Sending...";
+  btn.disabled = true;
+
+  const formData = {
+    access_key: "3373bc4d-9512-4846-a240-2b0584d320df",
+    subject: "New Anonymous Problem - CBS Box",
+    message: problem,
+    from_name: "CBS Anonymous Box"
+  };
+
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json();
+    if(data.success){
+      status.textContent = "✅ Masla chala gaya! Shukria.";
+      status.className = "text-center mt-4 text-sm text-green-600";
+      problemInput.value = "";
+    } else {
+      throw new Error();
+    }
+  } catch(e){
+    status.textContent = "❌ Error, dubara try karo";
+    status.className = "text-center mt-4 text-sm text-red-500";
+  }
+  btn.textContent = "Submit Anonymously";
+  btn.disabled = false;
+});
 </script>
+
 </body>
 </html>
