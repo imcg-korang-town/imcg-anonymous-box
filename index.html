@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBS - Awaz Box | Anonymous Portal</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+  .box { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  h2 { color: #2c3e50; text-align: center; }
+  p { color: #555; font-size: 14px; text-align: center; }
+  textarea { width: 100%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; margin: 10px 0; }
+  button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+  button:hover { background: #2980b9; }
+  #msg { text-align: center; margin-top: 15px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>CBS - Awaz Box</h2>
+  <p>Apna masla 100% anonymous likhen. Naam, class, roll number mat likhen.</p>
+  
+  <textarea id="problem" placeholder="Yahan apna masla likhen..."></textarea>
+  <button onclick="submitProblem()">Send Anonymously</button>
+  <div id="msg"></div>
+</div>
+
+<script>
+function submitProblem() {
+  let text = document.getElementById('problem').value;
+  let msg = document.getElementById('msg');
+  
+  if(text.trim() == "") {
+    msg.innerText = "Please masla likhen pehle.";
+    msg.style.color = "red";
+    return;
+  }
+  
+  // TEMP: Abhi Google Sheet connect nahi hai
+  msg.innerText = "Shukriya! Apka masla submit ho gaya hai.";
+  msg.style.color = "green";
+  document.getElementById('problem').value = "";
+  
+  // Jab Google Sheet ka link ban jaye to ye wali line lagani hai
+  // fetch('APNA_SCRIPT_LINK', { method: 'POST', body: JSON.stringify({problem: text}) })
+}
+</script>
+</body>
+</html>
