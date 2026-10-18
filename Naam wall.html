@@ -3,30 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wall - CBS Awaz Box</title>
-<style>
-  body{font-family:'Segoe UI',Arial;background:#121212;color:#e0e0e0;margin:0;padding:20px}
-  .container{max-width:800px;margin:auto}
-  h2{text-align:center;color:#fff}
-  .card{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:12px;padding:20px;margin:15px 0}
-  .card p{color:#bdbdbd;line-height:1.6}
-  .date{font-size:11px;color:#616161;margin-top:10px}
-</style>
+<title>Naam Wall - CBS</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="container">
-  <h2>CBS - MASLON KI DEEWAR</h2>
-  <p style="text-align:center;color:#757575;font-size:13px;">Yahan sab ke anonymous maslay show honge</p>
-  
-  <div class="card">
-    <p>Example: Canteen ka pani saaf nahi hai, please check karen.</p>
-    <div class="date">Anonymous - 2 hours ago</div>
-  </div>
+<body class="bg-[#f9f6f2] min-h-screen flex items-center justify-center p-4">
 
-  <div class="card">
-    <p>Example: Library me books purani hain, new edition chahiye.</p>
-    <div class="date">Anonymous - 5 hours ago</div>
-  </div>
+<div class="bg-white max-w-md w-full rounded-[30px] p-8 shadow-xl">
+  <h1 class="text-2xl font-bold text-center">Naam Wall ✨</h1>
+  <p class="text-center text-gray-500 text-sm mt-2">Apna naam chupke se bhejo</p>
+  
+  <input id="naam" type="text" placeholder="Naam yahan likho..." 
+  class="w-full mt-6 p-4 bg-gray-50 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black" />
+  
+  <button id="btn2" class="w-full mt-4 bg-black text-white py-4 rounded-2xl font-semibold">
+    Bhejo
+  </button>
+  
+  <p id="status2" class="text-center mt-4 text-sm"></p>
 </div>
+
+<script>
+const btn = document.getElementById('btn2');
+const naamInput = document.getElementById('naam');
+const status = document.getElementById('status2');
+
+btn.addEventListener('click', async () => {
+  const naam = naamInput.value.trim();
+  if(!naam){
+    status.textContent = "Naam to likho...";
+    status.className = "text-center mt-4 text-sm text-red-500";
+    return;
+  }
+
+  btn.textContent = "Sending...";
+  btn.disabled = true;
+
+  const formData = {
+    access_key: "3373bc4d-9512-4846-a240-2b0584d320df",
+    subject: "New Naam Wall Entry",
+    message: `Naam Wall pe naya naam: ${naam}`,
+    from_name: "Naam Wall"
+  };
+
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json();
+    if(data.success){
+      status.textContent = "✅ Naam chala gaya!";
+      status.className = "text-center mt-4 text-sm text-green-600";
+      naamInput.value = "";
+    } else { throw new Error(); }
+  } catch(e){
+    status.textContent = "❌ Error, dubara try karo";
+    status.className = "text-center mt-4 text-sm text-red-500";
+  }
+  btn.textContent = "Bhejo";
+  btn.disabled = false;
+});
+</script>
+
 </body>
 </html>
